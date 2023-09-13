@@ -1,0 +1,32 @@
+.logo h1 {
+    font-size: 28px;
+    padding-left: 10px;
+    padding-top: 6px;
+    padding-bottom: 0;
+    color: #0096da;
+    line-height: 25px;
+    font-weight: normal;
+    font-family: 'Roboto Condensed', sans-serif;
+    letter-spacing: -0.5px;
+    z-index: 1;
+  }
+  
+  .logo h1 > span {
+    font-size: 32px;
+    color: #001171;
+    line-height: 35px;
+    padding: 0;
+    margin: 0;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  
+  .complete_wrap {
+    border: solid 1px #ece5e5;
+    padding: 0;
+    border-width: 0 1px;
+    box-shadow: 0 0 8px #d8d7d7;
+  }
+  .header_background{
+    background: url(/public/assets/header-images/header_bg.jpg);  
+      background-size: cover;   }
