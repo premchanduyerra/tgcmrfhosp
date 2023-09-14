@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './login.css'
 import { toast } from 'react-toastify'
 import { loginUser } from '../../services/authService'
-import { doLogin } from '../../hooks/auth'
+import { doLogin, getCurrentUserDetails } from '../../hooks/auth'
 import { useNavigate } from 'react-router-dom'
 export const Login = () => {
     const navigate=useNavigate()
@@ -21,11 +21,11 @@ export const Login = () => {
         e.preventDefault();
         setShow(true)
         //validations
-        if(loginDetails.username===''|| loginDetails.password===''){
+        if(loginDetails.userName===''|| loginDetails.password===''){
           toast.error('Username or Password cannot be empty')
-          return
+          return;
         }
-      
+  
         //submit the data to server to generate token
         loginUser(loginDetails).then(response=>{
           console.log(response);
@@ -33,26 +33,22 @@ export const Login = () => {
           //save the data to sessionStorage
           doLogin(response,()=>{
             
-            if(response.statuscode===300){
+
+            if(response.statusCode===308){
               toast.error(response.message)
               setLoginDetails({
-                userName:'ss',
-                password:'ss',
-                userType:'P'
+                userName:'',
+                password:''
               })
               return;
             }
              console.log('Login Data stored to session storage');
-             if(response.responseData.users.userType==='P')
-                navigate('/user/citizen')
-             else 
-                 navigate('/user/home') 
-                
-                
-                 toast.success('Login Success')
+             navigate('/home')
+             toast.success('Login Success')
           })
         }).catch((error)=>{
           setShow(false)
+          toast.error('Something went wrong on server!!')
           //  if(error.response.status===400||error.response.status===404){
           //   toast.error(error.response.data.message)
           //  }
@@ -66,16 +62,15 @@ export const Login = () => {
   return (
     <div>
           <div className='formcontainer'>
-             <form method='post'>
+             <form  onSubmit={handleFormSubmit}>
              <h4 style={{fontSize:'16px',color:'#001070',borderBottom:'3px solid #0096da'}} className='pb-2'>Official Login</h4>
              <label>Username</label>
-             <input type='text' value={loginDetails} onChange={e=>handleChange(e,'username')}/>
+             <input type='text' value={loginDetails.userName} onChange={e=>handleChange(e,'userName')} name='userName' id='userName' />
              <label>Password</label>
-             <input type='password'/>
+             <input type='password'   value={loginDetails.password} onChange={e=>handleChange(e,'password')} name='password' id='password' />
              <button type='submit'>Sign In</button>
              </form>
-        </div>
-    
+        </div>   
     </div>
   )
 }

@@ -1,13 +1,18 @@
- import './App.css';
-import Header from './components/common/header/Header';
+import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Login } from './components/login/Login';
+import 'bootstrap/dist/js/bootstrap.js';
+import 'react-toastify/dist/ReactToastify.css';
+
+import Header from './components/common/header/Header';
 import { ToastContainer } from 'react-toastify';
 import { Route, Routes } from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.css';
-import { Home } from './components/home/Home';
-import { Contact } from './pages/Contact';
+ import { Contact } from './pages/Contact';
 import { Menu } from './components/common/menu/Menu';
+import { OtpLogin } from './components/otp-login/OtpLogin';
+import { Footer } from './components/common/footer/Footer';
+
+import { Body } from './components/common/Body/Body';
+import { Home } from './components/home/Home';
 
 function App() {
   const containerStyle = {
@@ -19,15 +24,16 @@ function App() {
 
 return (
     <div className="App container" style={containerStyle}>
-    <ToastContainer position='bottom-center'/>
+    <ToastContainer position='top-right'/>
     <Header/>
-    <Menu />
+   
     <Routes>
-            <Route path='/' element={<Home/>}/>
+            <Route path='/' element={<Body/>}/>
             <Route path='/contact-us' element={<Contact/>}/>
-                {/* <Route path='/otp-login' element={<OtpLogin/>}/>  */}
+            <Route path='/otp-login' element={<OtpLogin/>}/> 
+            <Route path='/home' element={<Home/>}/> 
     </Routes>
-      {/* Footer */}
+    <Footer/>
     </div>
   );
 }

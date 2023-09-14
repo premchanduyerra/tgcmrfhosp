@@ -1,3 +1,6 @@
+ import { encrypt,decrypt } from "../crypto/EncrDecr";
+
+
 //isLoggedIn
 export const isLoggedIn=()=>{
     let data =sessionStorage.getItem('data')
@@ -9,21 +12,25 @@ export const isLoggedIn=()=>{
 
 }
 
-//doLogin =>set data to sessionStorage
+//doLogin =>set encrypted data to sessionStorage
 export const doLogin=(data,next)=>{
-    if(data.statuscode===200){
-sessionStorage.setItem('data',JSON.stringify(data.responseData.users))
+    if(data.statusCode===200){
+
+        var encryptedUserData=encrypt(JSON.stringify(data.data));
+        sessionStorage.setItem('data',encryptedUserData)
+        sessionStorage.setItem('dataWithoutEncpt',JSON.stringify(data.data))//remove this line after completion
     }
-next()
+    next()
 }
 
 export const doUpdate=(data)=>{
-    // if(data.statuscode===200){
+
         console.log('data update in session storage')
         sessionStorage.removeItem('data')
-        sessionStorage.setItem('data',JSON.stringify(data))
-//     }
-// next()
+        var encryptedUserData=encrypt(JSON.stringify(data));
+        sessionStorage.setItem('data',encryptedUserData)
+        sessionStorage.setItem('dataWithoutEncpt',JSON.stringify(data))//remove this line after completion
+
 }
 
 //doLogout=>remove from sessionStorage
@@ -37,7 +44,8 @@ export const doLogout=(next)=>{
 //getCurrentUser
 export const getCurrentUserDetails=()=>{
     if(isLoggedIn()){
-        return JSON.parse(sessionStorage.getItem('data'))
+
+        return JSON.parse(decrypt(sessionStorage.getItem('data')))
     }
     else{
         return undefined
@@ -46,8 +54,5 @@ export const getCurrentUserDetails=()=>{
 
 export const getToken=()=>{
     let user=getCurrentUserDetails()
-    return {
-            authToken:user.jwtToken,
-            role: user.roleId
-           }
+    return user?.token;
 }
