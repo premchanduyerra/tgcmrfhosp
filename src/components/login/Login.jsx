@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './login.css'
 import { toast } from 'react-toastify'
 import { loginUser } from '../../services/authService'
-import { doLogin, getCurrentUserDetails } from '../../hooks/auth'
+import { doLogin, getCurrentUserDetails, isLoggedIn } from '../../hooks/auth'
 import { useNavigate } from 'react-router-dom'
+import { useRef } from 'react'
 export const Login = () => {
     const navigate=useNavigate()
 
@@ -58,7 +59,13 @@ export const Login = () => {
         })
       }
 
+      useEffect(() => {
 
+        if( isLoggedIn()){
+             navigate('/home');
+        }
+ 
+     }, [])
   return (
     <div>
           <div className='formcontainer'>
@@ -67,7 +74,7 @@ export const Login = () => {
              <label>Username</label>
              <input type='text' value={loginDetails.userName} onChange={e=>handleChange(e,'userName')} name='userName' id='userName' />
              <label>Password</label>
-             <input type='password'   value={loginDetails.password} onChange={e=>handleChange(e,'password')} name='password' id='password' />
+             <input type='password' value={loginDetails.password} onChange={e=>handleChange(e,'password')} name='password' id='password' />
              <button type='submit'>Sign In</button>
              </form>
         </div>   

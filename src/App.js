@@ -13,6 +13,8 @@ import { Footer } from './components/common/footer/Footer';
 
 import { Body } from './components/common/Body/Body';
 import { Home } from './components/home/Home';
+import { UpdateHosp } from './components/UpdateHosp/UpdateHosp';
+import { ChangePassword } from './components/changepassword/ChangePassword';
 
 function App() {
   const containerStyle = {
@@ -32,6 +34,8 @@ return (
             <Route path='/contact-us' element={<Contact/>}/>
             <Route path='/otp-login' element={<OtpLogin/>}/> 
             <Route path='/home' element={<Home/>}/> 
+            <Route path='/update-hosp' element={<UpdateHosp/>}/> 
+            <Route path='/changepwd' element={<ChangePassword/>}/>
     </Routes>
     <Footer/>
     </div>

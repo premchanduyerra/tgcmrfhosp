@@ -1,27 +1,75 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  NavbarText,
+} from 'reactstrap';
+import { NavLink as ReactLink } from 'react-router-dom'
+import { getCurrentUserDetails, isLoggedIn } from '../../../hooks/auth';
 
-export const OfficialMenu = () => {
-    return (
-        <nav class="navbar navbar-expand-lg navbar-light p-0" style={{ backgroundColor: '#0096da' }}>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-                <li class="nav-item active" style={{ backgroundColor: '#001171', borderRight: '1px solid white' }}>
-                    <Link to='/' className='text-decoration-none text-white nav-link m-2'>Home</Link>
-                </li>
-                <li class="nav-item active" style={{ borderRight: '1px solid white' }}>
-                    <Link to='/' className='text-decoration-none text-white nav-link m-2'>Reports</Link>
-                </li>
-                <li class="nav-item" style={{ borderRight: '1px solid white' }}>
-                    <Link to='/contact-us' className='text-decoration-none text-white nav-link m-2'>LogOut</Link>
-                </li>
- 
- 
-            </ul>
-        </div>
-    </nav>
-    )
+function OfficialMenu(args) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState({});
+
+  const toggle = () => setIsOpen(!isOpen);
+  
+
+
+  useEffect(() => { 
+
+    if(isLoggedIn){
+            setUser(getCurrentUserDetails);        
+    }   
+
+    }, []);
+
+
+
+  return (
+    <div>
+      <Navbar {...args} expand='md' color='info'>
+        {/* <NavbarBrand href="/">reactstrap</NavbarBrand> */}
+        <NavbarToggler onClick={toggle} />
+        <Collapse isOpen={isOpen} navbar>
+          <Nav className="me-auto" navbar>
+         
+            <NavItem>
+              <NavLink tag={ReactLink} to="/">Home</NavLink>
+            </NavItem>
+            <UncontrolledDropdown nav inNavbar>
+              <DropdownToggle nav caret>
+                Services
+              </DropdownToggle>
+              <DropdownMenu right>
+              <DropdownItem tag={ReactLink} to='/changepwd'>Change Password</DropdownItem>
+              <DropdownItem tag={ReactLink} to='/update-hosp'>Update Hospital Details</DropdownItem>
+            
+         
+              </DropdownMenu>
+             </UncontrolledDropdown>
+
+
+             <NavItem>
+              <NavLink tag={ReactLink} to="/logout">Log Out</NavLink>
+            </NavItem>
+            
+          
+          </Nav>
+          <NavbarText>{ user?.hospitalName}</NavbarText>
+        </Collapse>
+      </Navbar>
+    </div>
+  );
 }
+
+export default OfficialMenu;
