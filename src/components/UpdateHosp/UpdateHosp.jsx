@@ -12,6 +12,13 @@ export const UpdateHosp = () => {
           'hospitalAddress':'',
 
     });
+
+    const [hospital,setHospital]=useState({}); 
+    const [fetchHospDetails,setFetchHospDetails]=useState(false); 
+    const [valiadations,setValidations]=useState('');     
+
+
+
     const handleChange = (e,name) => {
         setHospitalDetails({ ...hospitalDetails, [name]: e.target.value });
     }
@@ -25,10 +32,32 @@ export const UpdateHosp = () => {
         //submit the data to server
         console.log(hospitalDetails)
         const response = privateAxios.post('/auth/UpdateHospDetails', hospitalDetails).then((response) => {
-            console.log(response.data);
-        }
-        ).catch((error) => {
+            if(response.status===200){
+                toast.success('Hospital Details Updated Successfully')
+                setFetchHospDetails(true)
+               setHospitalDetails({
+                'billingInchargeName':'',
+                'officialEmailId':'',
+                'hospitalAddress':'',
+               }
+          )
+
+            }
+            else{
+                toast.error("Error in updating hospital details")
+                console.log(response.data);
+                setValidations('')
+            }
+            setValidations('')
+        }).catch((error) => {
+           if(error.response.status===400){
+              console.log(error.response.data);
+              setValidations(error.response.data);
+           }
+           else{
             console.log(error);
+            toast.error(`error ${error}`)
+           }
         })
     }
 
@@ -40,14 +69,20 @@ export const UpdateHosp = () => {
         const getHospDetails= ()=>{
             const response= privateAxios.get('/auth/GetHospDetails').then((response)=>{
                 console.log(response.data);
+                setHospital(response.data.data);
+                console.log("===============");
+                console.log(hospital);
+                console.log("===============");
+
             }
             ).catch((error)=>{
                 console.log(error);
+                toast.error(`error ${error}`)
             })
             console.log(response.data);
         }
         getHospDetails();
-    }, []);
+    }, [fetchHospDetails]);
         
 
 
@@ -71,10 +106,10 @@ export const UpdateHosp = () => {
                 <th scope="col" style={{color:'#b8860b'}}>Hospital Address</th>
             </tr>
             <tr>
-            <td>lorem</td>
-            <td>lorem</td>
-            <td>lorem</td>
-            <td>lorem</td>
+            <td>{hospital.hospInchargeName}</td>
+            <td>{hospital.email}</td>
+            <td>{hospital.mobileNo}</td>
+            <td>{hospital.hospAddress}</td>
             </tr>
         </tbody>
         </table>
@@ -83,13 +118,16 @@ export const UpdateHosp = () => {
             <form  onSubmit={submitHandler}>
                 <h5 className='text-center text-primary text-underline'>Update Hospital Registration Details</h5>
                 <label>Billing Incharge Name:</label>
-                <input type='text' className='form-control' value={hospitalDetails.billingInchargeName} onChange={e=>handleChange(e,'billingInchargeName')}/>
+                <input type='text' className='form-control' name='billingInchargeName' value={hospitalDetails.billingInchargeName} onChange={e=>handleChange(e,'billingInchargeName')}/>
+                <div className='text-danger' style={{fontSize:'12px'}}><b>{valiadations.billingInchargeName}</b></div>
                 <label>Official Email id:</label>
-                <input type='text' className='form-control' value={hospitalDetails.officialEmailId} onChange={e=>handleChange(e,'officialEmailId')}/>
+                <input type='text' className='form-control' name='officialEmailId' value={hospitalDetails.officialEmailId} onChange={e=>handleChange(e,'officialEmailId')}/>
+                <div className='text-danger' style={{fontSize:'12px'}}><b>{valiadations.officialEmailId}</b></div>
                 <label>Hospital Address</label>
-                <input type='text' className='form-control' value={hospitalDetails.hospitalAddress} onChange={e=>handleChange(e,'hospitalAddress')}/>
+                <input type='text' className='form-control' name='hospitalAddress' value={hospitalDetails.hospitalAddress} onChange={e=>handleChange(e,'hospitalAddress')}/>
+                <div className='text-danger' style={{fontSize:'12px'}}><b>{valiadations.hospitalAddress}</b></div>
                 <div className='text-center'>
-                   <Button style={{background:'#5cb85c'}}>Update Details</Button>
+                <Button style={{background:'#5cb85c'}}>Update Details</Button>
                 </div>
             </form>
         </div>

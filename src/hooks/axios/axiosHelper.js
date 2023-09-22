@@ -14,7 +14,7 @@ export const privateAxios=axios.create({
 
 privateAxios.interceptors.request.use(config=>{
     const token=getToken()
-console.log(token);
+    console.log(token);
     if(token){
         config.headers.authToken=`${token}`
         return config

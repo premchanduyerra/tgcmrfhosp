@@ -17,7 +17,7 @@ const Header = () => {
   };
 
   return (
-    <div className="container complete_wrap">
+    <div className="container">
       <div className="header-middle row header_background"  >
         <div className="col-sm-8 logo" style={logoStyle}>
           <a href="#">

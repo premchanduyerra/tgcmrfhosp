@@ -1,8 +1,7 @@
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.js';
 import 'react-toastify/dist/ReactToastify.css';
-
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import Header from './components/common/header/Header';
 import { ToastContainer } from 'react-toastify';
 import { Route, Routes } from 'react-router-dom';
@@ -15,6 +14,7 @@ import { Body } from './components/common/Body/Body';
 import { Home } from './components/home/Home';
 import { UpdateHosp } from './components/UpdateHosp/UpdateHosp';
 import { ChangePassword } from './components/changepassword/ChangePassword';
+import ProtectedRoute from './guards/AuthGuard';
 
 function App() {
   const containerStyle = {
@@ -34,8 +34,8 @@ return (
             <Route path='/contact-us' element={<Contact/>}/>
             <Route path='/otp-login' element={<OtpLogin/>}/> 
             <Route path='/home' element={<Home/>}/> 
-            <Route path='/update-hosp' element={<UpdateHosp/>}/> 
-            <Route path='/changepwd' element={<ChangePassword/>}/>
+            <Route path='/update-hosp' element={<ProtectedRoute element={UpdateHosp} />}/>
+            <Route path='/changepwd' element={<ProtectedRoute element={ChangePassword} />}/>
     </Routes>
     <Footer/>
     </div>

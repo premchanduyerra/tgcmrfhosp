@@ -11,6 +11,7 @@ export const ChangePassword = () => {
         newPwd:'',
         confirmPwd:''
     })
+    const [valiadations,setValidations]=useState('');
     const handleChange=(e,field)=>{
        setUserPwd({...userPwd,[field]:e.target.value})
       }
@@ -23,21 +24,36 @@ export const ChangePassword = () => {
     }
     const submitHandler=(e)=>{
          e.preventDefault();
-            if(userPwd.currentPwd===''||userPwd.newPwd===''||userPwd.confirmPwd===''){
-                toast.error('Please enter all the fields')
-                return;
-            }
-            else if(userPwd.newPwd!==userPwd.confirmPwd){
-                toast.error('New password and Confirm password should be same')
-                return;
-            }
+            // if(userPwd.currentPwd===''||userPwd.newPwd===''||userPwd.confirmPwd===''){
+            //     toast.error('Please enter all the fields')
+            //     return;
+            // }
+            // else if(userPwd.newPwd!==userPwd.confirmPwd){
+            //     toast.error('New password and Confirm password should be same')
+            //     return;
+            // }
             //submit the data to server
             console.log(userPwd)
              const response= privateAxios.post('/auth/ChangePassword',userPwd).then((response)=>{
-                console.log(response.data);
+                if(response.status==200){
+                    toast.success('Password changed successfully');
+                    console.log(response.data);
+                }
+                else{
+                    toast.error('Error in changing password');
+                    console.log(response.data);       
+                }
+                setValidations('')
              })
              .catch((error)=>{  
-                console.log(error); 
+                if(error.response.status ===400){
+                    console.log(error.response.data);
+                    setValidations(error.response.data);
+                }
+                else{
+                    console.log(error);
+                    toast.error(`error ${error}`)
+                }
              })
 
     }
@@ -48,11 +64,14 @@ export const ChangePassword = () => {
             <form method='post' onSubmit={submitHandler}>
                 <h5 className='text-center text-primary text-underline'>Change password</h5>
                 <label>Current password:</label>
-                <input type='password' className='form-control' value={userPwd.currentPwd} onChange={e=>handleChange(e,'currentPwd')}/>
+                <input type='password' className='form-control' name='currentPwd' value={userPwd.currentPwd} onChange={e=>handleChange(e,'currentPwd')}/>
+                <div className='text-danger' style={{fontSize:'12px'}}><b>{valiadations.currentPwd}</b></div>
                 <label>New password:</label>
-                <input type='password' className='form-control' value={userPwd.newPwd} onChange={e=>handleChange(e,'newPwd')}/>
+                <input type='password' className='form-control' name='newPwd' value={userPwd.newPwd} onChange={e=>handleChange(e,'newPwd')}/>
+                <div className='text-danger' style={{fontSize:'12px'}}><b>{valiadations.newPwd}</b></div>
                 <label>Confirm password</label>
-                <input type='password' className='form-control' value={userPwd.confirmPwd} onChange={e=>handleChange(e,'confirmPwd')}/>
+                <input type='password' className='form-control' name='confirmPwd' value={userPwd.confirmPwd} onChange={e=>handleChange(e,'confirmPwd')}/>
+                <div className='text-danger' style={{fontSize:'12px'}}><b>{valiadations.passwordConfirmed}</b></div>
                 <div className='text-center'>
                 <Button type='submit' style={{background:'#5cb85c',marginRight:'25px'}}>Change Password</Button>
                 <Button style={{background:'#5cb85c'}} onClick={resetHandler}>Clear</Button>
