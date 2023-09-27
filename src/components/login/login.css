@@ -23,11 +23,12 @@ input{
         padding-left: 10px;
         width:100%;
 }
-button{
+.button{
     margin-top:10px !important;
-    padding:6px 25px;
+    padding:6px 20px;
     background-color:#001070;
     color:white;
     font-family:'Times New Roman';
     border:none;
+    margin-right: 10px;
 }

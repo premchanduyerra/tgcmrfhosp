@@ -24,26 +24,30 @@ export const ChangePassword = () => {
     }
     const submitHandler=(e)=>{
          e.preventDefault();
-            // if(userPwd.currentPwd===''||userPwd.newPwd===''||userPwd.confirmPwd===''){
-            //     toast.error('Please enter all the fields')
-            //     return;
-            // }
-            // else if(userPwd.newPwd!==userPwd.confirmPwd){
-            //     toast.error('New password and Confirm password should be same')
-            //     return;
-            // }
+            if(userPwd.currentPwd===''||userPwd.newPwd===''||userPwd.confirmPwd===''){
+                toast.error('Please enter all the fields')
+                return;
+            }
+            else if(userPwd.newPwd!==userPwd.confirmPwd){
+                toast.error('New password and Confirm password should be same')
+                return;
+            }
             //submit the data to server
             console.log(userPwd)
              const response= privateAxios.post('/auth/ChangePassword',userPwd).then((response)=>{
-                if(response.status==200){
-                    toast.success('Password changed successfully');
-                    console.log(response.data);
+                if(response.status===200){
+                    if(response.data.statusCode===200){
+                        toast.success("Password updated successfully!!")
+                        setUserPwd({
+                            currentPwd:'',
+                            newPwd:'',
+                            confirmPwd:''
+                        })
+                    }
+                    else{
+                        toast.error(response.data.message)
+                    }
                 }
-                else{
-                    toast.error('Error in changing password');
-                    console.log(response.data);       
-                }
-                setValidations('')
              })
              .catch((error)=>{  
                 if(error.response.status ===400){
@@ -60,7 +64,7 @@ export const ChangePassword = () => {
     return (
         <div>
          <Menu/>
-            <div className='p-2 w-50 mx-auto' style={{ border: '1px solid black', marginTop: '70px', marginBottom: '70px' }} >
+            <div className='p-4 w-50 mx-auto' style={{ border: '1px solid black', marginTop: '70px', marginBottom: '70px' }} >
             <form method='post' onSubmit={submitHandler}>
                 <h5 className='text-center text-primary text-underline'>Change password</h5>
                 <label>Current password:</label>

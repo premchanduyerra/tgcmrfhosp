@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react'
 import './login.css'
 import { toast } from 'react-toastify'
 import { loginUser } from '../../services/authService'
-import { doLogin, getCurrentUserDetails, isLoggedIn } from '../../hooks/auth'
+import { doLogin, isLoggedIn } from '../../hooks/auth'
 import { useNavigate } from 'react-router-dom'
-import { useRef } from 'react'
 export const Login = () => {
     const navigate=useNavigate()
 
@@ -33,8 +32,6 @@ export const Login = () => {
           setShow(false)
           //save the data to sessionStorage
           doLogin(response,()=>{
-            
-
             if(response.statusCode===308){
               toast.error(response.message)
               setLoginDetails({
@@ -75,7 +72,7 @@ export const Login = () => {
              <input type='text' value={loginDetails.userName} onChange={e=>handleChange(e,'userName')} name='userName' id='userName' />
              <label>Password</label>
              <input type='password' value={loginDetails.password} onChange={e=>handleChange(e,'password')} name='password' id='password' />
-             <button type='submit'>Sign In</button>
+             <button type='submit' className='button'>Sign In</button>
              </form>
         </div>   
     </div>

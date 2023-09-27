@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
   NavItem,
   NavLink,
@@ -15,11 +14,12 @@ import {
   NavbarText,
 } from 'reactstrap';
 import { NavLink as ReactLink } from 'react-router-dom'
-import { getCurrentUserDetails, isLoggedIn } from '../../../hooks/auth';
+import { doLogout, getCurrentUserDetails, isLoggedIn } from '../../../hooks/auth';
 
 function OfficialMenu(args) {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState({});
+  const navigate = useNavigate();  
 
   const toggle = () => setIsOpen(!isOpen);
   
@@ -30,10 +30,12 @@ function OfficialMenu(args) {
     if(isLoggedIn){
             setUser(getCurrentUserDetails);        
     }   
-
     }, []);
-
-
+    const handleLogout =()=>{
+       doLogout() 
+       navigate('/')
+       
+    }
 
   return (
     <div>
@@ -57,10 +59,12 @@ function OfficialMenu(args) {
          
               </DropdownMenu>
              </UncontrolledDropdown>
-
+             <NavItem>
+              <NavLink tag={ReactLink} to="/patient-report">Reports</NavLink>
+            </NavItem>
 
              <NavItem>
-              <NavLink tag={ReactLink} to="/logout">Log Out</NavLink>
+              <NavLink tag={ReactLink} to='/#' onClick={handleLogout}>Log Out</NavLink>
             </NavItem>
             
           

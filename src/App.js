@@ -14,7 +14,12 @@ import { Body } from './components/common/Body/Body';
 import { Home } from './components/home/Home';
 import { UpdateHosp } from './components/UpdateHosp/UpdateHosp';
 import { ChangePassword } from './components/changepassword/ChangePassword';
+
+
 import ProtectedRoute from './guards/AuthGuard';
+import { PatientReport, Report } from './components/patientreport/PatientReport';
+import { PendingReports } from './components/pendingreports/PendingReports';
+import { VerifiedList } from './components/VerifiedList/VerifiedList';
 
 function App() {
   const containerStyle = {
@@ -36,6 +41,9 @@ return (
             <Route path='/home' element={<Home/>}/> 
             <Route path='/update-hosp' element={<ProtectedRoute element={UpdateHosp} />}/>
             <Route path='/changepwd' element={<ProtectedRoute element={ChangePassword} />}/>
+            <Route path='/patient-report' element={<ProtectedRoute element={PatientReport}/>}/>
+            <Route path='/patient-report/pending' element={<ProtectedRoute element={PendingReports}/>}/>
+            <Route path='/patient-report/verified' element={<ProtectedRoute element={VerifiedList}/>}/>
     </Routes>
     <Footer/>
     </div>

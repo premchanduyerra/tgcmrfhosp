@@ -37,14 +37,12 @@ export const doUpdate=(data)=>{
 
 export const doLogout=(next)=>{
     sessionStorage.removeItem('data')
-    sessionStorage.removeItem("adminmenu")
-    next()
+    console.log("data removed from session")
 }
 
 //getCurrentUser
 export const getCurrentUserDetails=()=>{
     if(isLoggedIn()){
-
         return JSON.parse(decrypt(sessionStorage.getItem('data')))
     }
     else{
