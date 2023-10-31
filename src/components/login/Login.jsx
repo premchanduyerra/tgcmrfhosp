@@ -4,8 +4,10 @@ import { toast } from 'react-toastify'
 import { loginUser } from '../../services/authService'
 import { doLogin, isLoggedIn } from '../../hooks/auth'
 import { useNavigate } from 'react-router-dom'
+
 export const Login = () => {
     const navigate=useNavigate()
+    const [showPassword, setShowPassword] = useState(false);
 
     const [show,setShow]=useState(false)
     const [loginDetails,setLoginDetails]=useState({
@@ -41,7 +43,7 @@ export const Login = () => {
               return;
             }
              console.log('Login Data stored to session storage');
-             navigate('/home')
+             navigate('/patient-report')
              toast.success('Login Success')
           })
         }).catch((error)=>{
@@ -59,19 +61,38 @@ export const Login = () => {
       useEffect(() => {
 
         if( isLoggedIn()){
-             navigate('/home');
+             navigate('/patient-report');
         }
  
      }, [])
+     const togglePassword = () => {
+      setShowPassword(!showPassword);
+    };
   return (
     <div>
           <div className='formcontainer'>
              <form  onSubmit={handleFormSubmit}>
-             <h4 style={{fontSize:'16px',color:'#001070',borderBottom:'3px solid #0096da'}} className='pb-2'>Official Login</h4>
-             <label>Username</label>
+             <h4 style={{fontSize:'18px',color:'#001070',borderBottom:'3px solid #0096da'}} className='pb-2'>Official Login</h4>
+             <label className='label'>Username</label>
+             <div style={{position:'relative'}}>
              <input type='text' value={loginDetails.userName} onChange={e=>handleChange(e,'userName')} name='userName' id='userName' />
-             <label>Password</label>
-             <input type='password' value={loginDetails.password} onChange={e=>handleChange(e,'password')} name='password' id='password' />
+             <i class="bi bi-person-circle" style={{position:'absolute',right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}></i>
+             </div>
+             <label className='label'>Password</label>
+             <div style={{ position: 'relative' }}>
+        <input 
+          type={showPassword ? 'text' : 'password'}
+          value={loginDetails.password}
+          onChange={(e) => handleChange(e, 'password')}
+          name='password'
+          id='password'
+        />
+        <i
+          className={`bi ${showPassword ? 'bi-eye' : 'bi-eye-slash'}`}
+          style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}
+          onClick={togglePassword}
+        ></i>
+      </div>
              <button type='submit' className='button'>Sign In</button>
              </form>
         </div>   

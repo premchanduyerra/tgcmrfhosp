@@ -4,6 +4,8 @@ import { privateAxios } from '../../hooks/axios/axiosHelper';
 import { Button } from 'reactstrap';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { Label, FormGroup, Col, Input ,Table} from 'reactstrap';
+import { InputStyle, LabelStyle, StyledButton, SuccessButton } from '../../globalstyles/styled';
 
 export const UpdateHosp = () => {
     const [hospitalDetails, setHospitalDetails] = useState({
@@ -79,16 +81,12 @@ export const UpdateHosp = () => {
         }
         getHospDetails();
     }, [fetchHospDetails]);
-
-
-
-
     return (
         <div>
             <Menu />
             <div className='container'>
                 <div className='px-5 pt-4 text-center'>
-                    <table class="table table-primary table-striped table-bordered">
+                    <Table  responsive bordered striped id="table-content" className='table-primary'>
                         <thead>
                             <tr>
                                 <th colSpan={4} scope="col"style={{color:'red',fontSize:'20px'}}>Hospital Registration Details</th>
@@ -108,22 +106,28 @@ export const UpdateHosp = () => {
                                 <td>{hospital.hospAddress}</td>
                             </tr>
                         </tbody>
-                    </table>
+                    </Table>
                 </div>
-                <div className='p-4 w-50 mx-auto' style={{ border: '1px solid black', marginTop: '70px', marginBottom: '70px' }} >
+                <div className='p-4 w-50 mx-auto' style={{boxShadow:'rgba(0, 0, 0, 0.15) 0px 5px 15px 0px', marginTop: '70px', marginBottom: '70px' }} >
                     <form onSubmit={submitHandler}>
-                        <h5 className='text-center text-decoration-underline mb-3' style={{color:'green'}}><b>Update Hospital Registration Details</b></h5>
-                        <label>Billing Incharge Name:</label>
-                        <input type='text' className='form-control' name='billingInchargeName' value={hospitalDetails.billingInchargeName} onChange={e => handleChange(e, 'billingInchargeName')} />
+                        <LabelStyle>Update Hospital Registration Details</LabelStyle>
+                        <FormGroup row className='mt-4 mb-2'>
+                        <Label sm={5}>Billing Incharge Name:</Label>
+                        <Col sm={7}><InputStyle type='text' className='form-control' name='billingInchargeName' value={hospitalDetails.billingInchargeName} onChange={e => handleChange(e, 'billingInchargeName')} placeholder='Enter Billing Incharge name'/></Col>
+                        </FormGroup>
                         <div className='text-danger' style={{ fontSize: '12px' }}><b>{valiadations.billingInchargeName}</b></div>
-                        <label>Official Email id:</label>
-                        <input type='text' className='form-control' name='officialEmailId' value={hospitalDetails.officialEmailId} onChange={e => handleChange(e, 'officialEmailId')} />
+                        <FormGroup row className='mt-4 mb-2'>
+                        <Label sm={5}>Official Email id:</Label>
+                        <Col sm={7}><InputStyle type='text' className='form-control' name='officialEmailId' value={hospitalDetails.officialEmailId} onChange={e => handleChange(e, 'officialEmailId')} placeholder='Enter official mail-id'/></Col>
+                        </FormGroup>
                         <div className='text-danger' style={{ fontSize: '12px' }}><b>{valiadations.officialEmailId}</b></div>
-                        <label>Hospital Address</label>
-                        <input type='text' className='form-control' name='hospitalAddress' value={hospitalDetails.hospitalAddress} onChange={e => handleChange(e, 'hospitalAddress')} />
+                        <FormGroup row className='mt-4 mb-2'>
+                        <Label sm={5}>Hospital Address:</Label>
+                        <Col sm={7}><InputStyle type='text' className='form-control' name='hospitalAddress' value={hospitalDetails.hospitalAddress} onChange={e => handleChange(e, 'hospitalAddress')} placeholder='Enter hospital address'/></Col>
+                        </FormGroup>
                         <div className='text-danger' style={{ fontSize: '12px' }}><b>{valiadations.hospitalAddress}</b></div>
-                        <div className='text-center'>
-                            <Button style={{ background: '#5cb85c' }}>Update Details</Button>
+                        <div className='text-center pt-2'>
+                            <StyledButton>Update Details</StyledButton>
                         </div>
                     </form>
                 </div>

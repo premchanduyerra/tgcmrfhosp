@@ -45,9 +45,9 @@ function OfficialMenu(args) {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="me-auto" navbar>
          
-            <NavItem>
+            {/* <NavItem>
               <NavLink tag={ReactLink} to="/">Home</NavLink>
-            </NavItem>
+            </NavItem> */}
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
                 Services

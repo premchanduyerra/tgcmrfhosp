@@ -6,3 +6,9 @@ p{
     font-family:'Times New Roman';
     color:white;
 }
+.image{
+    margin-left: 3px;
+    margin-right: 3px;
+    border-radius: 10px;
+    width: 20px;
+}

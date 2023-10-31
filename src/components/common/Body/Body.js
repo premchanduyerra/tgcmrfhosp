@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Login } from '../../login/Login'
 import { Menu } from '../menu/Menu'
  
@@ -14,7 +14,6 @@ export const Body = () => {
         paddingRight:'5px',
         color: 'red',
     }
-    
     return (
         <>
          <Menu />
