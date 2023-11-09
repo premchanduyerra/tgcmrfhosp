@@ -23,8 +23,10 @@ export const exportToPDF = (data, title, filename) => {
   const container = document.createElement('div');
   container.innerHTML = data;
 
-  document.body.appendChild(container);
+  container.style.position = 'absolute';
+  container.style.left = '-9999px';
 
+  document.body.appendChild(container);
   html2canvas(container).then((canvas) => {
     console.log(container)
     document.body.removeChild(container);

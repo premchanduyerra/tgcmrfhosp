@@ -22,7 +22,7 @@ const Header = () => {
         <div className="col-sm-8 logo" style={logoStyle}>
           <a href="#">
             <img
-              src="assets/header-images/telanganalogo.png"
+              src="/assets/header-images/telanganalogo.png"
               alt="Telangana Logo"
               style={imgStyle}
             />

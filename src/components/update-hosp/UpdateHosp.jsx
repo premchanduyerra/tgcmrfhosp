@@ -6,18 +6,24 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Label, FormGroup, Col, Input ,Table} from 'reactstrap';
 import { InputStyle, LabelStyle, StyledButton, SuccessButton } from '../../globalstyles/styled';
+import { doLogout } from '../../hooks/auth';
+import { useNavigate } from 'react-router-dom';
+import { handleLogoutAndRedirect } from '../../hooks/auth/authUtils';
+const hasRedirected = false;
 
 export const UpdateHosp = () => {
+    const navigate = useNavigate();
     const [hospitalDetails, setHospitalDetails] = useState({
         'billingInchargeName': '',
         'officialEmailId': '',
         'hospitalAddress': '',
 
     });
+    const hasRedirected  = false;
 
     const [hospital, setHospital] = useState({});
     const [fetchHospDetails, setFetchHospDetails] = useState(false);
-    const [valiadations, setValidations] = useState('');
+    const [valiadations, setValidations] = useState(true);
 
 
 
@@ -31,9 +37,14 @@ export const UpdateHosp = () => {
             toast.error('Please enter all the fields')
             return;
         }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailRegex.test(hospitalDetails.officialEmailId) === false) {
+            toast.error('Please enter valid email id')
+            return;
+        }
         //submit the data to server
         console.log(hospitalDetails)
-        const response = privateAxios.post('/auth/UpdateHospDetails', hospitalDetails).then((response) => {
+        const response = privateAxios.put('/auth/UpdateHospDetails', hospitalDetails).then((response) => {
             if (response.status === 200) {
                 if (response.data.statusCode === 200) {
                     toast.success('Hospital Details Updated Successfully')
@@ -51,13 +62,16 @@ export const UpdateHosp = () => {
             }
             setValidations('')
         }).catch((error) => {
-            if (error.response.status === 400) {
-                console.log(error.response.data);
-                setValidations(error.response.data);
+            if(error.response){
+                if (error.response.status === 400) {
+                    setValidations(error.response.data);
+                }
+                else {
+                    handleLogoutAndRedirect(navigate,error);
+                }
             }
-            else {
-                console.log(error);
-                toast.error(`error ${error}`)
+            else{
+                toast.error('Error in updating Hospital Details');
             }
         })
     }
@@ -69,14 +83,21 @@ export const UpdateHosp = () => {
 
         const getHospDetails = () => {
             const response = privateAxios.get('/auth/GetHospDetails').then((response) => {
-                console.log(response.data);
+                console.log(response);
                 setHospital(response.data.data);
-                console.log(hospital);
             }
-            ).catch((error) => {
-                console.log(error);
-                toast.error(`error ${error}`)
+            )
+            .catch((error) => {
+                if(error.response){
+                    handleLogoutAndRedirect(navigate,error);
+                }
+                else{
+                    toast.error('Error in fetching Hospital Details');
+                }
             })
+            .finally(() => {
+                setFetchHospDetails(false);
+              })
             console.log(response.data);
         }
         getHospDetails();
@@ -86,9 +107,9 @@ export const UpdateHosp = () => {
             <Menu />
             <div className='container'>
                 <div className='px-5 pt-4 text-center'>
-                    <Table  responsive bordered striped id="table-content" className='table-primary'>
+                    <Table  responsive bordered id="table-content" style={{borderColor: '#0052CC'}}>
                         <thead>
-                            <tr>
+                            <tr className='table-primary'>
                                 <th colSpan={4} scope="col"style={{color:'red',fontSize:'20px'}}>Hospital Registration Details</th>
                             </tr>
                         </thead>
@@ -112,18 +133,18 @@ export const UpdateHosp = () => {
                     <form onSubmit={submitHandler}>
                         <LabelStyle>Update Hospital Registration Details</LabelStyle>
                         <FormGroup row className='mt-4 mb-2'>
-                        <Label sm={5}>Billing Incharge Name:</Label>
-                        <Col sm={7}><InputStyle type='text' className='form-control' name='billingInchargeName' value={hospitalDetails.billingInchargeName} onChange={e => handleChange(e, 'billingInchargeName')} placeholder='Enter Billing Incharge name'/></Col>
+                        <Label md={5}>Billing Incharge Name:</Label>
+                        <Col md={7}><InputStyle type='text' className='form-control' name='billingInchargeName' value={hospitalDetails.billingInchargeName} onChange={e => handleChange(e, 'billingInchargeName')} placeholder='Enter Billing Incharge name'/></Col>
                         </FormGroup>
                         <div className='text-danger' style={{ fontSize: '12px' }}><b>{valiadations.billingInchargeName}</b></div>
                         <FormGroup row className='mt-4 mb-2'>
-                        <Label sm={5}>Official Email id:</Label>
-                        <Col sm={7}><InputStyle type='text' className='form-control' name='officialEmailId' value={hospitalDetails.officialEmailId} onChange={e => handleChange(e, 'officialEmailId')} placeholder='Enter official mail-id'/></Col>
+                        <Label md={5}>Official Email id:</Label>
+                        <Col md={7}><InputStyle type='text' className='form-control' name='officialEmailId' value={hospitalDetails.officialEmailId} onChange={e => handleChange(e, 'officialEmailId')} placeholder='Enter official mail-id'/></Col>
                         </FormGroup>
                         <div className='text-danger' style={{ fontSize: '12px' }}><b>{valiadations.officialEmailId}</b></div>
                         <FormGroup row className='mt-4 mb-2'>
-                        <Label sm={5}>Hospital Address:</Label>
-                        <Col sm={7}><InputStyle type='text' className='form-control' name='hospitalAddress' value={hospitalDetails.hospitalAddress} onChange={e => handleChange(e, 'hospitalAddress')} placeholder='Enter hospital address'/></Col>
+                        <Label md={5}>Hospital Address:</Label>
+                        <Col md={7}><InputStyle type='text' className='form-control' name='hospitalAddress' value={hospitalDetails.hospitalAddress} onChange={e => handleChange(e, 'hospitalAddress')} placeholder='Enter hospital address'/></Col>
                         </FormGroup>
                         <div className='text-danger' style={{ fontSize: '12px' }}><b>{valiadations.hospitalAddress}</b></div>
                         <div className='text-center pt-2'>

@@ -1,101 +1,104 @@
-import React, { useEffect, useState } from 'react'
-import './login.css'
-import { toast } from 'react-toastify'
-import { loginUser } from '../../services/authService'
-import { doLogin, isLoggedIn } from '../../hooks/auth'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import './login.css';
+import { toast } from 'react-toastify';
+import { loginUser } from '../../services/authService';
+import { doLogin, isLoggedIn } from '../../hooks/auth';
+import { useNavigate } from 'react-router-dom';
 
-export const Login = () => {
-    const navigate=useNavigate()
-    const [showPassword, setShowPassword] = useState(false);
+const Login = () => {
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loginDetails, setLoginDetails] = useState({
+    userName: '',
+    password: '',
+  });
 
-    const [show,setShow]=useState(false)
-    const [loginDetails,setLoginDetails]=useState({
-        userName:'',
-        password:''
-    })
+  const handleChange = (e, field) => {
+    setLoginDetails({ ...loginDetails, [field]: e.target.value });
+  };
 
-    const handleChange=(e,field)=>{
-        setLoginDetails({...loginDetails,[field]:e.target.value})
-      }
-      const handleFormSubmit=(e)=>{
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-        e.preventDefault();
-        setShow(true)
-        //validations
-        if(loginDetails.userName===''|| loginDetails.password===''){
-          toast.error('Username or Password cannot be empty')
+    // Validations
+    if (loginDetails.userName === '' || loginDetails.password === '') {
+      toast.error('Username or Password cannot be empty');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Submit the data to server to generate token
+      const response = await loginUser(loginDetails);
+      console.log(response);
+      setLoading(false);
+
+      // Save the data to sessionStorage
+      doLogin(response, () => {
+        if (response.statusCode === 308) {
+          toast.error(response.message);
+          setLoginDetails({
+            userName: '',
+            password: '',
+          });
           return;
         }
-  
-        //submit the data to server to generate token
-        loginUser(loginDetails).then(response=>{
-          console.log(response);
-          setShow(false)
-          //save the data to sessionStorage
-          doLogin(response,()=>{
-            if(response.statusCode===308){
-              toast.error(response.message)
-              setLoginDetails({
-                userName:'',
-                password:''
-              })
-              return;
-            }
-             console.log('Login Data stored to session storage');
-             navigate('/patient-report')
-             toast.success('Login Success')
-          })
-        }).catch((error)=>{
-          setShow(false)
-          toast.error('Something went wrong on server!!')
-          //  if(error.response.status===400||error.response.status===404){
-          //   toast.error(error.response.data.message)
-          //  }
-          //  else{
-          //   toast.error('Something went wrong on server!!')
-          //  }
-        })
-      }
+        console.log('Login Data stored to session storage');
+        navigate('/patient-report');
+        toast.success('Login Success');
+      });
+    } catch (error) {
+      setLoading(false);
+      toast.error('Something went wrong on server!!');
+    }
+  };
 
-      useEffect(() => {
+  useEffect(() => {
+    if (isLoggedIn()) {
+      navigate('/patient-report');
+    }
+  }, []);
 
-        if( isLoggedIn()){
-             navigate('/patient-report');
-        }
- 
-     }, [])
-     const togglePassword = () => {
-      setShowPassword(!showPassword);
-    };
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div>
-          <div className='formcontainer'>
-             <form  onSubmit={handleFormSubmit}>
-             <h4 style={{fontSize:'18px',color:'#001070',borderBottom:'3px solid #0096da'}} className='pb-2'>Official Login</h4>
-             <label className='label'>Username</label>
-             <div style={{position:'relative'}}>
-             <input type='text' value={loginDetails.userName} onChange={e=>handleChange(e,'userName')} name='userName' id='userName' />
-             <i class="bi bi-person-circle" style={{position:'absolute',right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}></i>
-             </div>
-             <label className='label'>Password</label>
-             <div style={{ position: 'relative' }}>
-        <input 
-          type={showPassword ? 'text' : 'password'}
-          value={loginDetails.password}
-          onChange={(e) => handleChange(e, 'password')}
-          name='password'
-          id='password'
-        />
-        <i
-          className={`bi ${showPassword ? 'bi-eye' : 'bi-eye-slash'}`}
-          style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}
-          onClick={togglePassword}
-        ></i>
+      <div className="formcontainer">
+        <form onSubmit={handleFormSubmit}>
+          <h4 style={{ fontSize: '18px', color: '#001070', borderBottom: '3px solid #0096da' }} className="pb-2">
+            Official Login
+          </h4>
+          <label className="label">Username</label>
+          <div style={{ position: 'relative' }}>
+            <input type="text" value={loginDetails.userName} onChange={(e) => handleChange(e, 'userName')} name="userName" id="userName" />
+            <i className="bi bi-person-circle" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}></i>
+          </div>
+          <label className="label">Password</label>
+          <div style={{ position: 'relative' }}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={loginDetails.password}
+              onChange={(e) => handleChange(e, 'password')}
+              name="password"
+              id="password"
+            />
+            <i
+              className={`bi ${showPassword ? 'bi-eye' : 'bi-eye-slash'}`}
+              style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}
+              onClick={togglePassword}
+            ></i>
+          </div>
+          <button type="submit" className="button" disabled={loading}>
+            {loading ? 'Signing In...' : 'Sign In'}
+          </button>
+        </form>
       </div>
-             <button type='submit' className='button'>Sign In</button>
-             </form>
-        </div>   
     </div>
-  )
-}
+  );
+};
+
+export default Login;

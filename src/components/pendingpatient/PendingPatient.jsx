@@ -20,6 +20,12 @@ export const PendingPatient = () => {
     const [selectedOption, setSelectedOption] = useState('');
     const [admissionDate, setAdmissionDate] = useState(new Date());
     const [dischargeDate, setDischargeDate] = useState(new Date());
+    const preStyle = {
+        fontWeight: 'bold',
+        fontSize: '15px',
+    };
+
+
     const [patientformData, setPatientFormData] = useState({
         patientStatus: '',
         patientName: '',
@@ -53,11 +59,10 @@ export const PendingPatient = () => {
         });
     };
     useEffect(() => {
-        setPatientData((prevPatientData) => ({
-            ...prevPatientData,
-            ...state.patientData,
-        }));
-    }, [state.patientData]);
+        const patientData = JSON.parse(localStorage.getItem('patientData'));
+        console.log('Patient Data in PendingPatient:', patientData);
+        setPatientData(patientData);
+      }, [state.patientData]);
 
     const handleRadioChange = (event) => {
         setSelectedStatus(event.target.value);
@@ -93,19 +98,19 @@ export const PendingPatient = () => {
         setPatientFormData(prevData => ({
             ...prevData,
             [field]: formattedDate,
-        }));
-    }
+        }));}
+    const formatDate = (dateString) => {
+        const [day, month, year] = dateString.split("/");
+        return `${year}-${month}-${day}`;
+      };
     const intOnly = (event) => {
         event.target.value = event.target.value.replace(/[^0-9]/g, '');
     };
+    const numOnly = (event) => {
+        event.target.value = event.target.value.replace(/[^0-9.]/g, '');
+    }
     const handleChange = (event, field) => {
         let value = event.target.value;
-
-        // Additional validation for specific fields (e.g., billAmount)
-        if ((field === 'billAmount' || field === 'billClaimedAmount') && !/^\d*\.?\d*$/.test(value)) {
-            toast.error('Please enter only numbers for the Bill Amount');
-            return;
-        }
         setPatientFormData({
             ...patientformData,
             [field]: event.target.value
@@ -147,8 +152,9 @@ export const PendingPatient = () => {
                 toast.error('Date of Discharge is required')
                 return
             }
-            const admissionDate = new Date(patientformData.dateOfAdmission);
-            const dischargeDate = new Date(patientformData.dateOfDischarge);
+            console.log(patientformData.dateOfDischarge,patientformData.dateOfAdmission)
+            const admissionDate = new Date(formatDate(patientformData.dateOfAdmission));
+            const dischargeDate = new Date(formatDate(patientformData.dateOfDischarge));
             console.log(admissionDate, dischargeDate)
 
             if (dischargeDate <= admissionDate) {
@@ -190,7 +196,7 @@ export const PendingPatient = () => {
                 return
             }
         }
-        const response = privateAxios.post('/auth/UpdatePatientStatus', { ...patientData, ...patientformData }).then((response) => {
+        const response = privateAxios.put('/auth/UpdatePatientStatus', { ...patientData, ...patientformData }).then((response) => {
             console.log(response)
             console.log(response.data.statusCode)
             if (response.status === 200) {
@@ -219,18 +225,18 @@ export const PendingPatient = () => {
                 <div className='p-3 w-50 mx-auto' style={{ border: '1px solid black', marginTop: '70px', marginBottom: '70px' }} >
                     <LabelStyle className='text-center'>Patient Details</LabelStyle>
                     <div className='px-4 pt-3'>
-                        <pre><b>Patient IP: </b>{patientData.patientIp}</pre>
-                        <pre><b>Admission No: </b>{patientData.admissionNo}</pre>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="patientStatus" value="accept"
+                        <pre style={preStyle}><b>Patient IP: </b>{patientData.patientIp}</pre>
+                        <pre style={preStyle}><b>Admission No: </b>{patientData.admissionNo}</pre>
+                        <div className="form-check form-check-inline">
+                            <input className="form-check-input" type="radio" name="patientStatus" value="accept"
                                 onChange={handleRadioChange}
                                 checked={selectedStatus === 'accept'} />
-                            <label class="form-check-label" for="inlineRadio1"><b style={{color:'green'}}>ACCEPT</b></label>
+                            <label className="form-check-label"><b style={{color:'green'}}>ACCEPT</b></label>
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="patientStatus" value="reject" onChange={handleRadioChange}
+                        <div className="form-check form-check-inline">
+                            <input className="form-check-input" type="radio" name="patientStatus" value="reject" onChange={handleRadioChange}
                                 checked={selectedStatus === 'reject'} />
-                            <label class="form-check-label" for="inlineRadio2"><b style={{color:'red'}}>REJECT</b></label>
+                            <label className="form-check-label"><b style={{color:'red'}}>REJECT</b></label>
                         </div>
                         {selectedStatus === 'accept' && (
                             <form onSubmit={submitHandler}>
@@ -279,7 +285,7 @@ export const PendingPatient = () => {
                                 </FormGroup>
                                 <FormGroup row className='mt-2'>
                                     <Label lg={4}> Bill Amount(Rs):<SpanStyle>*</SpanStyle></Label>
-                                    <Col lg={8}><InputStyle type='text' name='billAmount' value={patientformData.billAmount} onChange={e => handleChange(e, 'billAmount')} maxLength={7} /></Col>
+                                    <Col lg={8}><InputStyle type='text' name='billAmount' value={patientformData.billAmount} onChange={e => handleChange(e, 'billAmount')} maxLength={7} onKeyUp={numOnly}/></Col>
                                 </FormGroup>
                                 <FormGroup row className='mt-2'>
                                     <Label lg={4}>Bill Claimed From:<SpanStyle>*</SpanStyle></Label>
@@ -296,7 +302,7 @@ export const PendingPatient = () => {
                                 {showBillClaimedInput && (
                                     <FormGroup row className='mt-2'>
                                         <Label lg={4}>Bill Claimed Amount(Rs):<SpanStyle>*</SpanStyle></Label>
-                                        <Col lg={8}><InputStyle name='billClaimedAmount' type='text' value={patientformData.billClaimedAmount} onChange={e => handleChange(e, 'billClaimedAmount')} maxLength={6} /></Col>
+                                        <Col lg={8}><InputStyle name='billClaimedAmount' type='text' value={patientformData.billClaimedAmount} onChange={e => handleChange(e, 'billClaimedAmount')} maxLength={6} onKeyUp={numOnly} /></Col>
                                     </FormGroup>
                                 )}
                                 <FormGroup row className='mt-2'>
@@ -324,14 +330,14 @@ export const PendingPatient = () => {
 
                         {selectedStatus === 'reject' && (
                             <form onSubmit={submitHandler}>
-                                <div class="form-group mt-3">
-                                    <label for="exampleFormControlTextarea1" className='mb-2'>Reason for Rejection:<SpanStyle>*</SpanStyle></label>
-                                    <textarea class="form-control" name='reasonForRejection' id="exampleFormControlTextarea1" rows="3" value={patientformData.reasonForRejection} onChange={e => handleChange(e, 'reasonForRejection')}></textarea>
+                                <div className="form-group mt-3">
+                                    <label className='mb-2'>Reason for Rejection:<SpanStyle>*</SpanStyle></label>
+                                    <textarea className="form-control" name='reasonForRejection' id="exampleFormControlTextarea1" rows="3" value={patientformData.reasonForRejection} onChange={e => handleChange(e, 'reasonForRejection')}></textarea>
                                 </div>
-                                <div class="form-check mt-3">
-                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" checked={patientData.isInformationCorrect}
+                                <div className="form-check mt-3">
+                                    <input className="form-check-input" type="checkbox" value="" id="defaultCheck1" checked={patientData.isInformationCorrect}
                                         onChange={handleCheckboxChange} />
-                                    <label class="form-check-label" for="defaultCheck1">
+                                    <label className="form-check-label">
                                         <b>I submit the above information as per our record is correct.</b>
                                     </label>
                                 </div>

@@ -1,28 +1,28 @@
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 import "react-datepicker/dist/react-datepicker.css";
 
 import Header from './components/common/header/Header';
 import { ToastContainer } from 'react-toastify';
-import { Route, Routes } from 'react-router-dom';
- import { Contact } from './pages/Contact';
-import { Menu } from './components/common/menu/Menu';
+import { Route, Routes ,Navigate} from 'react-router-dom';
+import { Contact } from './pages/Contact';
 import { OtpLogin } from './components/otp-login/OtpLogin';
 import { Footer } from './components/common/footer/Footer';
 
-import { Body } from './components/common/Body/Body';
-import { Home } from './components/home/Home';
-import { UpdateHosp } from './components/UpdateHosp/UpdateHosp';
-import { ChangePassword } from './components/changepassword/ChangePassword';
+import  Body  from './components/common/Body/Body';
+import  Home  from './components/home/Home';
+import { UpdateHosp } from './components/update-hosp/UpdateHosp';
+import  ChangePassword  from './components/changepassword/ChangePassword';
 import { VerifiedReport } from './components/verifiedreport/VerifiedReport';
 
 
 import ProtectedRoute from './guards/AuthGuard';
-import { PatientReport, Report } from './components/patientreport/PatientReport';
-import { PendingReports } from './components/pendingreports/PendingReports';
-import { VerifiedList } from './components/VerifiedList/VerifiedList';
+import { PatientReport } from './components/patientreport/PatientReport';
+import { PendingReports } from './components/pending-reports/PendingReports';
+import { VerifiedList } from './components/verified-list/VerifiedList';
 import { GlobalContextProvider } from './context/globalContext';
 import { PendingPatient } from './components/pendingpatient/PendingPatient';
 
@@ -52,7 +52,10 @@ return (
             <Route path='/patient-report/verified-list' element={<ProtectedRoute element={VerifiedList}/>}/>
             <Route path='/patient-report/pending-reports/pending-patient' element={<ProtectedRoute element={PendingPatient}/>}/>
             <Route path="/verified-report" element={<VerifiedReport/>}/>
+            <Route path="*" element={<Navigate to="/" />} />
+
     </Routes>
+    
     <Footer/>
     </GlobalContextProvider>
     </div>

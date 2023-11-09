@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate} from 'react-router-dom';
+
 import {
   Collapse,
   Navbar,
@@ -21,9 +22,14 @@ function OfficialMenu(args) {
   const [user, setUser] = useState({});
   const navigate = useNavigate();  
 
+
   const toggle = () => setIsOpen(!isOpen);
   
-
+  const handleLogout =()=>{
+    doLogout() 
+    navigate('/')
+    
+ }
 
   useEffect(() => { 
 
@@ -31,12 +37,6 @@ function OfficialMenu(args) {
             setUser(getCurrentUserDetails);        
     }   
     }, []);
-    const handleLogout =()=>{
-       doLogout() 
-       navigate('/')
-       
-    }
-
   return (
     <div>
       <Navbar {...args} expand='md' color='info'>
@@ -52,7 +52,7 @@ function OfficialMenu(args) {
               <DropdownToggle nav caret>
                 Services
               </DropdownToggle>
-              <DropdownMenu right>
+              <DropdownMenu end>
               <DropdownItem tag={ReactLink} to='/changepwd'>Change Password</DropdownItem>
               <DropdownItem tag={ReactLink} to='/update-hosp'>Update Hospital Details</DropdownItem>
             

@@ -1,27 +1,23 @@
-import React, { useEffect } from 'react'
-import { isLoggedIn } from '../../hooks/auth'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect } from 'react';
+import { isLoggedIn } from '../../hooks/auth';
+import { useNavigate } from 'react-router-dom';
 import { Menu } from '../common/menu/Menu';
 
-export const Home = () => {
-    const navigate=useNavigate ();
-
-    
-
+const Home = () => {
+    const navigate = useNavigate();
 
     useEffect(() => {
-
-       if( !isLoggedIn()){
+        if (!isLoggedIn()) {
             navigate('/');
-       }
+        }
+    }, [navigate]);
 
-    }, [])
-
-    
     return (
         <div>
-              <Menu />
-                 home
+            <Menu />
+            <p>Home</p>
         </div>
-    )
-}
+    );
+};
+
+export default Home;

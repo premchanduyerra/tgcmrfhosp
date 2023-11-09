@@ -10,9 +10,9 @@ export const Footer = () => {
                 <p>Copyright © 2023 Chief Minister Relief Fund.</p>
                 <p>All Rights Reserved</p>
                 <p>Best viewed with Internet Explorer IE 9+
-                 <img src="assets/header-images/ieimage.png" className='image' alt='Inter Explorer'/>
-                 Firefox 61+ <img src="assets/header-images/firefoximg.jpg" alt='Firefox' className='image'/>
-                 Chrome 70+ <img src="assets/header-images/chromeimg.jpg" alt='chrome' className='image'/></p>
+                 <img src="/assets/header-images/ieimage.png" className='image' alt='Inter Explorer'/>
+                 Firefox 61+ <img src="/assets/header-images/firefoximg.jpg" alt='Firefox' className='image'/>
+                 Chrome 70+ <img src="/assets/header-images/chromeimg.jpg" alt='chrome' className='image'/></p>
             </div>
             <div className='col-md-7 text-start text-md-end m-md-0 mt-3'>
                 <p>Disclaimer</p>

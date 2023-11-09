@@ -4,9 +4,10 @@ import DataTable from 'react-data-table-component';
 import { toast } from 'react-toastify';
 import { Menu } from '../common/menu/Menu';
 import { Link, useNavigate } from 'react-router-dom';
-import { AnchorButton, StyledButton, SuccessButton } from '../../globalstyles/styled';
+import { AnchorButton } from '../../globalstyles/styled';
 import { useGlobalContext } from '../../context/globalContext';
-import { CustomDataTable } from '../customdatatable/CustomDataTable';
+import  CustomDataTable  from '../customdatatable/CustomDataTable';
+import { handleLogoutAndRedirect } from '../../hooks/auth/authUtils';
 
 export const PendingReports = () => {
   const navigate = useNavigate();
@@ -16,9 +17,9 @@ export const PendingReports = () => {
 
   const handlePatientClick = (patientIp, admissionNo, cmrfNo) => {
     actions.setPatientData({ patientIp, admissionNo, cmrfNo })
+    localStorage.setItem('patientData', JSON.stringify({ patientIp, admissionNo, cmrfNo }));
     navigate('pending-patient');
   }
-
   useEffect(() => {
     privateAxios.get(`/auth/GetPendingPatientReports?p=P`)
       .then((response) => {
@@ -27,8 +28,12 @@ export const PendingReports = () => {
         setFilteredReports(response.data.data)
       })
       .catch((error) => {
-        console.log(error);
-        toast.error(`Error ${error}`);
+        if(error.response){
+          handleLogoutAndRedirect(navigate,error);
+      }
+      else{
+          toast.error('Error in fetching Pending Patient Reports');
+      }
       });
   }, [])
 

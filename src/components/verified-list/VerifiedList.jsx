@@ -5,7 +5,8 @@ import DataTable from 'react-data-table-component';
 import { Menu } from '../common/menu/Menu';
 import { AnchorButton, StyledButton, SuccessButton } from '../../globalstyles/styled';
 import { useNavigate } from 'react-router-dom';
-import { CustomDataTable } from '../customdatatable/CustomDataTable';
+import  CustomDataTable  from '../customdatatable/CustomDataTable';
+import { handleLogoutAndRedirect } from '../../hooks/auth/authUtils';
 export const VerifiedList = () => {
   const [verifiedList, setVerifiedList] = useState([])
   const [filteredReports, setFilteredReports] = useState([])
@@ -13,13 +14,17 @@ export const VerifiedList = () => {
   useEffect(() => {
     privateAxios.get('/auth/GetVerifiedList')
       .then((response) => {
-        console.log(response.data.data)
+        console.log(response.data.data);
         setVerifiedList(response.data.data)
         setFilteredReports(response.data.data)
       })
       .catch((error) => {
-        console.log(error);
-        toast.error(`Error ${error}`);
+        if(error.response){
+          handleLogoutAndRedirect(navigate,error);
+      }
+      else{
+          toast.error('Error in fetching Verified List');
+      }
       })
 
   }, [])
@@ -84,11 +89,6 @@ export const VerifiedList = () => {
       applicationCount: totalApprovedApplications,
       rejectedCount: totalRejectedApplications,
     }
-  const handleSearch = (event) => {
-    const searchTerm = event.target.value.toLowerCase();
-    const newData = filteredReports.filter(row => row.verifiedDate.toLowerCase().includes(searchTerm));
-    setVerifiedList(newData)
-  };
   return (
     <>
       <Menu />

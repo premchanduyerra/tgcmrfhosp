@@ -5,6 +5,7 @@ import { isLoggedIn } from '../hooks/auth';
  
 const ProtectedRoute = ({ element: Element }) => {
   const navigate = useNavigate();
+  console.log("executing protected route")
 
   if (!isLoggedIn()) {
          return <Navigate to='/home'/>
