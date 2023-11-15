@@ -20,7 +20,6 @@ const ChangePassword = () => {
         const { name, value } = e.target;
         setUserPwd((prevState) => ({ ...prevState, [name]: value }));
     };
-
     const resetHandler = () => {
         setUserPwd({
             currentPwd: '',
@@ -28,15 +27,12 @@ const ChangePassword = () => {
             confirmPwd: '',
         });
     };
-
     const submitHandler = async (e) => {
         e.preventDefault();
-
         if (!userPwd.currentPwd || !userPwd.newPwd || !userPwd.confirmPwd) {
             toast.error('Please enter all the fields');
             return;
         }
-
         if (userPwd.newPwd !== userPwd.confirmPwd) {
             toast.error('New password and Confirm password should be same');
             return;
@@ -67,7 +63,6 @@ const ChangePassword = () => {
             }
         }
     };
-
     return (
         <div>
             <Menu />

@@ -1,10 +1,9 @@
 // ProtectedRoute.js
 import React from 'react';
-import { Navigate, Route, useNavigate } from 'react-router-dom';
+import { Navigate} from 'react-router-dom';
 import { isLoggedIn } from '../hooks/auth';
  
 const ProtectedRoute = ({ element: Element }) => {
-  const navigate = useNavigate();
   console.log("executing protected route")
 
   if (!isLoggedIn()) {

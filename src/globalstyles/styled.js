@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 export const StyledButton = styled.button`
   background-color: #0052CC;
   color: #fff;
@@ -23,7 +23,7 @@ margin-bottom:5px;
 &:hover {
   background-color: #008000;
 }
-`
+`;
 export const AnchorButton = styled.button ` 
 display: inline-block;
 padding:0px;
@@ -34,7 +34,7 @@ cursor: pointer;
 color: #0052CC;
 background: transparent;
 border: none;
-`
+`;
 export const LabelStyle = styled.label`
   font-family: "Arial Black", sans-serif;
   display: block;

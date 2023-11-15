@@ -14,7 +14,6 @@ export const VerifiedList = () => {
   useEffect(() => {
     privateAxios.get('/auth/GetVerifiedList')
       .then((response) => {
-        console.log(response.data.data);
         setVerifiedList(response.data.data)
         setFilteredReports(response.data.data)
       })

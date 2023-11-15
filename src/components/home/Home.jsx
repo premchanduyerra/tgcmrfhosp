@@ -11,7 +11,6 @@ const Home = () => {
             navigate('/');
         }
     }, [navigate]);
-
     return (
         <div>
             <Menu />

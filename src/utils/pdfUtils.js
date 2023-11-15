@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+
 const generatePdf = (canvas, fileName, imgWidth = 190, imgHeight=0) => {
   const pdf = new jsPDF('p', 'mm', 'a4');
   const imgData = canvas.toDataURL('image/png');
@@ -28,7 +29,7 @@ export const exportToPDF = (data, title, filename) => {
 
   document.body.appendChild(container);
   html2canvas(container).then((canvas) => {
-    console.log(container)
+    console.log(container);
     document.body.removeChild(container);
     generatePdf(canvas, filename);
   });

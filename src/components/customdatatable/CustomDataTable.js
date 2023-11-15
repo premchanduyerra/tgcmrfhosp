@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import DataTable from 'react-data-table-component';
-import { printContent } from '../../utils/printUtils';
-import { exportToExcel } from '../../utils/excelUtils';
-import { exportToPDF } from '../../utils/pdfUtils';
-import { AnchorButton, InputStyle, StyledButton, SuccessButton } from '../../globalstyles/styled';
+import {printContent} from '../../utils/printUtils';
+import {exportToExcel} from '../../utils/excelUtils';
+import {exportToPDF} from '../../utils/pdfUtils';
+import {AnchorButton, InputStyle, StyledButton, SuccessButton} from '../../globalstyles/styled';
 
-const CustomDataTable = ({ data, columns, title, fileName }) => {
+const CustomDataTable = ({data, columns, title, fileName}) => {
   const [filteredData, setFilteredData] = useState(data);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -36,7 +36,7 @@ const CustomDataTable = ({ data, columns, title, fileName }) => {
   };
 
   const columnStyles = {
-    fontSize: '16px', 
+    fontSize: '16px',
   };
 
   const inputStyle = {
@@ -54,7 +54,7 @@ const CustomDataTable = ({ data, columns, title, fileName }) => {
     const tableStart = '<table style="border-collapse: collapse; width: 100%;">';
     const tableEnd = '</table>';
     const headingRow = `<tr><th colspan="${columns.length + 1}" style="text-align: center; padding: 15px; border: 1px solid #ddd;">${title}</th></tr>`;
-    const thStyle = 'text-align: center;border: 1px solid #ddd'
+    const thStyle = 'text-align: center;border: 1px solid #ddd';
     const headerRow = `<tr>${columns.map((column) => `<th style="${thStyle}">${column.name}</th>`).join('')}</tr>`;
     const tdStyle = 'text-align: center; padding: 5px; border: 1px solid #ddd;';
     const dataRows = filteredData.map((report) => {
@@ -68,7 +68,7 @@ const CustomDataTable = ({ data, columns, title, fileName }) => {
     return content;
   };
 
-  const handleExportExcel = () => { 
+  const handleExportExcel = () => {
     const content = generateTableContent();
     exportToExcel(content, title, fileName);
   };
@@ -81,15 +81,14 @@ const CustomDataTable = ({ data, columns, title, fileName }) => {
   const handleSearch = (event) => {
     const searchTerm = event.target.value.toLowerCase();
     const newData = data.filter((row) =>
-      Object.values(row).some((value) => value !== null && value.toString().toLowerCase().includes(searchTerm))
+      Object.values(row).some((value) => value !== null && value.toString().toLowerCase().includes(searchTerm)),
     );
     setFilteredData(newData);
   };
-
   return (
     <div className='px-5 pt-4 my-2'>
       <div className='text-end mb-2'>
-        <SuccessButton style={{ marginRight: '0px' }} onClick={() => window.history.back()}>Back</SuccessButton>
+        <SuccessButton style={{marginRight: '0px'}} onClick={() => window.history.back()}>Back</SuccessButton>
       </div>
       {data.length !== 0 && (
         <div className='d-flex flex-column flex-md-row justify-content-md-between justify-content-between align-items-center'>
@@ -98,9 +97,9 @@ const CustomDataTable = ({ data, columns, title, fileName }) => {
             <StyledButton onClick={handleExportExcel}>Excel</StyledButton>
             <StyledButton onClick={handlePdf}>PDF</StyledButton>
           </div>
-          <div style={{ position: 'relative' }}>
-            <input type='text' placeholder='Search...' onChange={handleSearch} style={{ width: '100%', borderRadius: '5px' }} />
-            <i className="bi bi-search" style={{ position: 'absolute', right: '10px', top: '35%', transform: 'translateY(-50%)', cursor: 'pointer' }}></i>
+          <div style={{position: 'relative'}}>
+            <input type='text' placeholder='Search...' onChange={handleSearch} style={{width: '100%', borderRadius: '5px'}} />
+            <i className="bi bi-search" style={{position: 'absolute', right: '10px', top: '35%', transform: 'translateY(-50%)', cursor: 'pointer'}}></i>
           </div>
         </div>
       )}
