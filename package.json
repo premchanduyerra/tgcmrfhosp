@@ -33,7 +33,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "env-cmd -f .env.development node loadUrl.js && react-scripts build",
+    "build:dev": "env-cmd -f .env.dev node loadUrl.js &&react-scripts build",
+    "build:qa": "env-cmd -f .env.qa node loadUrl.js &&react-scripts build",
+    "build:uat": "env-cmd -f .env.uat node loadUrl.js &&react-scripts build",
+    "build:prod": "env-cmd -f .env.production node loadUrl.js &&react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -56,6 +60,10 @@
     ]
   },
   "devDependencies": {
-    "@types/bootstrap": "^5.2.8"
-  }
+    "@types/bootstrap": "^5.2.8",
+    "dotenv": "^16.3.1",
+    "env-cmd": "^10.1.0",
+    "fs-extra": "^11.1.1"
+  },
+  "homepage": "https://tgcmrfhosp.cgg.gov.in"
 }
