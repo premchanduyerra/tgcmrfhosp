@@ -2,7 +2,7 @@
   "name": "tgcmrfhosp",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
+   "dependencies": {
     "@mui/material": "^5.14.17",
     "@mui/styled-engine-sc": "^6.0.0-alpha.5",
     "@testing-library/jest-dom": "^5.17.0",
@@ -33,11 +33,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "env-cmd -f .env.development node loadUrl.js && react-scripts build",
-    "build:dev": "env-cmd -f .env.dev node loadUrl.js &&react-scripts build",
-    "build:qa": "env-cmd -f .env.qa node loadUrl.js &&react-scripts build",
-    "build:uat": "env-cmd -f .env.uat node loadUrl.js &&react-scripts build",
-    "build:prod": "env-cmd -f .env.production node loadUrl.js &&react-scripts build",
+    "build": "react-scripts build",
+    "build:localsys": "env-cmd -f .env  react-scripts build",
+    "build:dev": "env-cmd -f .env.dev  react-scripts build",
+    "build:qa": "env-cmd -f .env.qa  react-scripts build",
+    "build:uat": "env-cmd -f .env.uat  react-scripts build",
+    "build:prod": "env-cmd -f .env.production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -64,6 +65,5 @@
     "dotenv": "^16.3.1",
     "env-cmd": "^10.1.0",
     "fs-extra": "^11.1.1"
-  },
-  "homepage": "https://tgcmrfhosp.cgg.gov.in"
+  }
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import './footer.css';
+import basePath from '../../../helpers/basePathHelper';
 
 export const Footer = () => {
     return (
@@ -10,9 +11,9 @@ export const Footer = () => {
                 <p className='paragraph'>Copyright © 2023 Chief Minister Relief Fund.</p>
                 <p className='paragraph'>All Rights Reserved</p>
                 <p className='paragraph'>Best viewed with Internet Explorer IE 9+
-                 <img src="/assets/header-images/ieimage.png" className='image' alt='Inter Explorer'/>
-                 Firefox 61+ <img src="/assets/header-images/firefoximg.jpg" alt='Firefox' className='image'/>
-                 Chrome 70+ <img src="/assets/header-images/chromeimg.jpg" alt='chrome' className='image'/></p>
+                 <img src={basePath()+"/assets/header-images/ieimage.png"} className='image' alt='Inter Explorer'/>
+                 Firefox 61+ <img src={basePath()+"/assets/header-images/firefoximg.jpg"} alt='Firefox' className='image'/>
+                 Chrome 70+ <img src={basePath()+"/assets/header-images/chromeimg.jpg"} alt='chrome' className='image'/></p>
             </div>
             <div className='col-md-7 text-start text-md-end m-md-0 mt-3'>
                 <p className='paragraph'>Disclaimer</p>

@@ -1,6 +1,8 @@
 import React from 'react';
 import './header.css';
+import basePath from '../../../helpers/basePathHelper';
 const Header = () => {
+
   const headerStyle = {
     background: 'url("assets/header-images/header-bg.jpg")',
     backgroundSize: 'cover',
@@ -22,7 +24,7 @@ const Header = () => {
         <div className="col-sm-8 logo" style={logoStyle}>
           <a href="#">
             <img
-              src="/assets/header-images/telanganalogo.png"
+              src={basePath()+"/assets/header-images/telanganalogo.png"}
               alt="Telangana Logo"
               style={imgStyle}
             />
